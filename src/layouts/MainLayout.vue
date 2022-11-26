@@ -16,13 +16,9 @@
 
 <script setup>
 import { computed } from '@vue/reactivity';
-import { onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 
 const route = useRoute();
-onMounted(() => {
-  console.log({ route: route });
-});
 const title = computed(() => {
   const currentPath = route.fullPath;
   if (currentPath == '/') return 'QChat';

@@ -1,1 +1,3 @@
 https://quasar.dev/style/positioning
+
+https://quasar.dev/vue-components/list-and-list-items
