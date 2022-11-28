@@ -42,7 +42,7 @@
 <script setup>
 import { ref } from 'vue';
 
-const name = 'UsersPage';
+const name = 'ChatPage';
 const newMessage = ref('');
 const messages = ref([
   {
