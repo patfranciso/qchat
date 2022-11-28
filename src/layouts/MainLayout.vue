@@ -13,6 +13,15 @@
         <q-toolbar-title class="absolute-center">
           {{ title }}
         </q-toolbar-title>
+        <q-btn
+          v-if="route.fullPath.includes('/chat')"
+          to="/auth"
+          class="absolute-right q-pr-sm"
+          icon="account_circle"
+          flat
+          dense
+          label="login"
+        />
       </q-toolbar>
     </q-header>
     <q-page-container>
