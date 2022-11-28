@@ -14,7 +14,6 @@
           {{ title }}
         </q-toolbar-title>
         <q-btn
-          v-if="route.fullPath.includes('/chat')"
           to="/auth"
           class="absolute-right q-pr-sm"
           icon="account_circle"
