@@ -34,18 +34,22 @@
 </template>
 <script setup>
 import { ref } from 'vue';
+import { useChatStore } from 'src/stores/chatStore';
+
 const name = 'LoginRegister';
 const { tab } = defineProps(['tab']);
 let formData = ref({
-  name: '',
-  email: '',
-  password: '',
+  name: 'Pat',
+  email: 'pat@test.com',
+  password: '1234567890',
 });
+const chatStore = useChatStore();
 const submitForm = () => {
   if (tab == 'login') {
     console.log('login', formData.value);
   } else {
     console.log('register', formData.value);
+    chatStore.registerUser(formData.value);
   }
 };
 </script>
