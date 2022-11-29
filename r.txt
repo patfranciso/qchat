@@ -30,3 +30,7 @@ Y88b.Y8b88P Y88b 888 888  888      X88 888  888 888
 ✔ Author: … Patrick Omogbeme <patfranciso@gmail.com>
 ✔ Pick your CSS preprocessor: › Sass with SCSS syntax
 ✔ Check the features needed for your project: › State Management (Pinia)
+
+$ yarn add firebase
+
+$ quasar new boot firebase
