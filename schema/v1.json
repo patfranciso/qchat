@@ -1,0 +1,24 @@
+{
+  "users": {
+    "userid1": {
+      "name": "John",
+      "email": "john@doe.com"
+    },
+    "userid2": {
+      "name": "Jane",
+      "email": "jane@doe.com"
+    }
+  },
+  "chats": {
+    "userd1-userid2": {
+      "messageid1": {
+        "text": "Hi Jane. How are you?",
+        "from": "userid1"
+      },
+      "messageid2": {
+        "text": "Good thanks, how are you?",
+        "from": "userid1"
+      }
+    }
+  }
+}
