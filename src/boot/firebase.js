@@ -12,6 +12,7 @@ import {
   ref,
   set,
   connectDatabaseEmulator,
+  onValue,
 } from 'firebase/database';
 import firebaseConfig from '../../firebaseConfig';
 
@@ -33,4 +34,5 @@ export {
   rtdb,
   ref,
   set,
+  onValue,
 };

@@ -9,10 +9,11 @@ import {
   onAuthStateChanged,
   ref as dbRef,
   set,
+  onValue,
 } from 'src/boot/firebase';
 
 export const useChatStore = defineStore('chat', {
-  state: () => ({}),
+  state: () => ({ userDetails: {} }),
   getters: {
     doubleCount: state => state.counter * 2,
   },
@@ -34,7 +35,6 @@ export const useChatStore = defineStore('chat', {
         });
     },
     loginUser({ name, email, password }) {
-      console.log({ action: 'loginUser', payload: { email, password } });
       signInWithEmailAndPassword(auth, email, password)
         .then(response => {
           console.log(response);
@@ -42,6 +42,35 @@ export const useChatStore = defineStore('chat', {
         .catch(error => {
           console.log(error.message);
         });
+    },
+    setUserDetails(payload) {
+      this.userDetails = payload;
+    },
+    handleAuthStateChanged() {
+      console.log('handleAuthStateChanged');
+      onAuthStateChanged(auth, user => {
+        if (user) {
+          // User is logged in
+          let userId = auth.currentUser.uid;
+          onValue(
+            dbRef(rtdb, '/users/' + userId),
+            snapshot => {
+              const userDetails = snapshot.val();
+              console.log({ userDetails });
+              this.setUserDetails({
+                name: userDetails.name,
+                email: userDetails.email,
+                userId,
+              });
+            },
+            {
+              onlyOnce: true,
+            }
+          );
+        } else {
+          // User is logged out
+        }
+      });
     },
   },
 });

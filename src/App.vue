@@ -2,10 +2,14 @@
   <router-view />
 </template>
 
-<script>
-import { defineComponent } from 'vue'
+<script setup>
+import { onMounted, ref } from 'vue';
+import { useChatStore } from 'src/stores/chatStore';
 
-export default defineComponent({
-  name: 'App'
-})
+name: 'App';
+
+const chatStore = useChatStore();
+onMounted(() => {
+  chatStore.handleAuthStateChanged();
+});
 </script>

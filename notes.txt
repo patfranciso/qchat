@@ -1,3 +1,18 @@
 https://quasar.dev/style/positioning
 
 https://quasar.dev/vue-components/list-and-list-items
+
+https://firebase.google.com/docs/database/web/read-and-write?authuser=0#web-version-9-modular
+import { getDatabase, ref, onValue } from "firebase/database";
+import { getAuth } from "firebase/auth";
+
+const db = getDatabase();
+const auth = getAuth();
+
+const userId = auth.currentUser.uid;
+return onValue(ref(db, '/users/' + userId), (snapshot) => {
+  const username = (snapshot.val() && snapshot.val().username) || 'Anonymous';
+  // ...
+}, {
+  onlyOnce: true
+});
