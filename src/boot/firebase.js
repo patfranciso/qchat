@@ -7,7 +7,12 @@ import {
   signOut,
   onAuthStateChanged,
 } from 'firebase/auth';
-import { getDatabase, connectDatabaseEmulator } from 'firebase/database';
+import {
+  getDatabase,
+  ref,
+  set,
+  connectDatabaseEmulator,
+} from 'firebase/database';
 import firebaseConfig from '../../firebaseConfig';
 
 // Initialize Firebase
@@ -26,4 +31,6 @@ export {
   signOut,
   onAuthStateChanged,
   rtdb,
+  ref,
+  set,
 };

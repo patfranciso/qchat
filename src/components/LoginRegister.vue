@@ -39,8 +39,8 @@ import { useChatStore } from 'src/stores/chatStore';
 const name = 'LoginRegister';
 const { tab } = defineProps(['tab']);
 let formData = ref({
-  name: 'Pat',
-  email: 'pat@test.com',
+  name: 'Pat3',
+  email: 'pat3@test.com',
   password: '1234567890',
 });
 const chatStore = useChatStore();
