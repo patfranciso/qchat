@@ -13,6 +13,7 @@ import {
   set,
   connectDatabaseEmulator,
   onValue,
+  update,
 } from 'firebase/database';
 import firebaseConfig from '../../firebaseConfig';
 
@@ -35,4 +36,5 @@ export {
   ref,
   set,
   onValue,
+  update,
 };
