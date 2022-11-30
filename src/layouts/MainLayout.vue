@@ -14,6 +14,7 @@
           {{ title }}
         </q-toolbar-title>
         <q-btn
+          v-if="!userDetails.userId"
           to="/auth"
           class="absolute-right q-pr-sm"
           icon="account_circle"
@@ -21,6 +22,17 @@
           dense
           label="login"
         />
+        <q-btn
+          v-else
+          @click="logoutUser"
+          to="/auth"
+          class="absolute-right q-pr-sm"
+          icon="account_circle"
+          flat
+          dense
+          >Logout <br />
+          {{ userDetails.name }}
+        </q-btn>
       </q-toolbar>
     </q-header>
     <q-page-container>
@@ -32,6 +44,8 @@
 <script setup>
 import { computed } from '@vue/reactivity';
 import { useRoute } from 'vue-router';
+import { storeToRefs } from 'pinia';
+import { useChatStore } from 'src/stores/chatStore';
 
 const route = useRoute();
 const title = computed(() => {
@@ -40,4 +54,14 @@ const title = computed(() => {
   else if (currentPath == '/chat') return 'Chat';
   else if (currentPath == '/auth') return 'Login';
 });
+const chatStore = useChatStore();
+const { userDetails } = storeToRefs(chatStore);
+const logoutUser = () => {
+  chatStore.logoutUser();
+};
 </script>
+<style lang="sass">
+.q-toolbar
+  .q-btn
+    line-height: 1.2
+</style>

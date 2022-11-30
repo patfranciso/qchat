@@ -43,6 +43,10 @@ export const useChatStore = defineStore('chat', {
           console.log(error.message);
         });
     },
+    logoutUser() {
+      console.log('logout');
+      signOut(auth);
+    },
     setUserDetails(payload) {
       this.userDetails = payload;
     },
@@ -69,6 +73,7 @@ export const useChatStore = defineStore('chat', {
           );
         } else {
           // User is logged out
+          this.setUserDetails({});
         }
       });
     },
