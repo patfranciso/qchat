@@ -47,6 +47,7 @@ const chatStore = useChatStore();
 const submitForm = () => {
   if (tab == 'login') {
     console.log('login', formData.value);
+    chatStore.loginUser(formData.value);
   } else {
     console.log('register', formData.value);
     chatStore.registerUser(formData.value);

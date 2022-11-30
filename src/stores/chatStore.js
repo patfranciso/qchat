@@ -18,7 +18,6 @@ export const useChatStore = defineStore('chat', {
   },
   actions: {
     registerUser({ name, email, password }) {
-      console.log({ action: 'registerUser', payload: { email, password } });
       createUserWithEmailAndPassword(auth, email, password)
         .then(response => {
           console.log(response);
@@ -29,6 +28,16 @@ export const useChatStore = defineStore('chat', {
             email,
             online: true,
           });
+        })
+        .catch(error => {
+          console.log(error.message);
+        });
+    },
+    loginUser({ name, email, password }) {
+      console.log({ action: 'loginUser', payload: { email, password } });
+      signInWithEmailAndPassword(auth, email, password)
+        .then(response => {
+          console.log(response);
         })
         .catch(error => {
           console.log(error.message);
