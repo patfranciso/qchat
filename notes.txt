@@ -16,3 +16,11 @@ return onValue(ref(db, '/users/' + userId), (snapshot) => {
 }, {
   onlyOnce: true
 });
+
+
+https://github.com/vuejs/pinia/discussions/1092
+@janjas92 on Feb 25
+Hi,
+add router to pinia like that:
+const pinia = createPinia() pinia.use(({ store }) => { store.router = markRaw(router) }); app.use(pinia)
+then you have access to router in pinia store by the this.

@@ -1,5 +1,5 @@
-import { defineStore } from 'pinia';
-
+import { defineStore, createPinia } from 'pinia';
+// import { useRouter } from 'vue-router';
 import {
   rtdb,
   auth,
@@ -11,7 +11,11 @@ import {
   set,
   onValue,
 } from 'src/boot/firebase';
-
+const pinia = createPinia();
+pinia.use(({ store }) => {
+  store.router = markRaw(router);
+});
+// const router = useRouter();
 export const useChatStore = defineStore('chat', {
   state: () => ({ userDetails: {} }),
   getters: {
@@ -71,9 +75,11 @@ export const useChatStore = defineStore('chat', {
               onlyOnce: true,
             }
           );
+          this.router.push('/');
         } else {
           // User is logged out
           this.setUserDetails({});
+          this.router.replace('/auth');
         }
       });
     },
