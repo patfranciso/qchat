@@ -56,9 +56,7 @@ const title = computed(() => {
 });
 const chatStore = useChatStore();
 const { userDetails } = storeToRefs(chatStore);
-const logoutUser = () => {
-  chatStore.logoutUser();
-};
+const { logoutUser } = chatStore;
 </script>
 <style lang="sass">
 .q-toolbar
