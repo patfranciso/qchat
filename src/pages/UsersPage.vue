@@ -2,7 +2,7 @@
   <q-page class="flex q-pa-md">
     <q-list class="full-width" separator>
       <q-item
-        v-for="user in users"
+        v-for="user in otherUsers"
         to="/chat"
         :key="user.id"
         clickable
@@ -30,20 +30,10 @@
 </template>
 
 <script setup>
-import { computed } from '@vue/reactivity';
-import { reactive, toRefs } from 'vue';
 import { useChatStore } from 'stores/chatStore';
+import { storeToRefs } from 'pinia';
 
 const chatStore = useChatStore();
 name: 'UsersPage';
-// const users = computed(() => chatStore.users);
-// const users = computed(() => chatStore.otherUsers());
-const users = computed(() => {
-  return chatStore.otherUsers();
-});
-// const state = toRefs(
-//   reactive({
-//     users: computed(() => chatStore.otherUsers()),
-//   })
-// );
+const { otherUsers } = storeToRefs(chatStore);
 </script>
