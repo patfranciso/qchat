@@ -19,7 +19,16 @@ pinia.use(({ store }) => {
 export const useChatStore = defineStore('chat', {
   state: () => ({ userDetails: {}, users: {} }),
   getters: {
-    doubleCount: state => state.counter * 2,
+    otherUsers(state) {
+      // return state.users;
+      let usersFiltered = {};
+      Object.keys(state.users).forEach(key => {
+        if (key !== state.userDetails.userId) {
+          usersFiltered[key] = state.users[key];
+        }
+      });
+      return usersFiltered;
+    },
   },
   actions: {
     registerUser({ name, email, password }) {

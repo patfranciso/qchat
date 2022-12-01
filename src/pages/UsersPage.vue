@@ -30,22 +30,20 @@
 </template>
 
 <script setup>
+import { computed } from '@vue/reactivity';
+import { reactive, toRefs } from 'vue';
+import { useChatStore } from 'stores/chatStore';
+
+const chatStore = useChatStore();
 name: 'UsersPage';
-const users = [
-  {
-    id: 1,
-    name: 'Pat',
-    online: true,
-  },
-  {
-    id: 2,
-    name: 'Mallorie Alessandrini',
-    online: false,
-  },
-  {
-    id: 3,
-    name: 'Elisabetta Wicklen',
-    online: true,
-  },
-];
+// const users = computed(() => chatStore.users);
+// const users = computed(() => chatStore.otherUsers());
+const users = computed(() => {
+  return chatStore.otherUsers();
+});
+// const state = toRefs(
+//   reactive({
+//     users: computed(() => chatStore.otherUsers()),
+//   })
+// );
 </script>
