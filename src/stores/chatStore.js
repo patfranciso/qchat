@@ -10,13 +10,14 @@ import {
   set,
   onValue,
   update,
+  onChildAdded,
 } from 'src/boot/firebase';
 const pinia = createPinia();
 pinia.use(({ store }) => {
   store.router = markRaw(router);
 });
 export const useChatStore = defineStore('chat', {
-  state: () => ({ userDetails: {} }),
+  state: () => ({ userDetails: {}, users: {} }),
   getters: {
     doubleCount: state => state.counter * 2,
   },
@@ -80,6 +81,7 @@ export const useChatStore = defineStore('chat', {
               online: true,
             },
           });
+          this.firebaseGetUsers();
           this.router.push('/');
         } else {
           // User is logged out
@@ -96,6 +98,20 @@ export const useChatStore = defineStore('chat', {
     },
     firebaseUpdateUser(payload) {
       update(dbRef(rtdb, 'users/' + payload.userId), payload.updates);
+    },
+    addUser(payload) {
+      console.log({ payload });
+      this.users[payload.userId] = payload.userDetails;
+    },
+    firebaseGetUsers() {
+      const usersRef = dbRef(rtdb, 'users');
+
+      onChildAdded(usersRef, snapshot => {
+        const userDetails = snapshot.val();
+        const userId = snapshot.key;
+        console.log({ action: 'firebaseGetUsers', snapshot, userDetails });
+        this.addUser({ userId, userDetails });
+      });
     },
   },
 });

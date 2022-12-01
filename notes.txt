@@ -24,3 +24,22 @@ Hi,
 add router to pinia like that:
 const pinia = createPinia() pinia.use(({ store }) => { store.router = markRaw(router) }); app.use(pinia)
 then you have access to router in pinia store by the this.
+
+
+
+https://firebase.google.com/docs/database/web/lists-of-data#web-version-9_2
+import { getDatabase, ref, onChildAdded, onChildChanged, onChildRemoved } from "firebase/database";
+
+const db = getDatabase();
+const commentsRef = ref(db, 'post-comments/' + postId);
+onChildAdded(commentsRef, (data) => {
+  addCommentElement(postElement, data.key, data.val().text, data.val().author);
+});
+
+onChildChanged(commentsRef, (data) => {
+  setCommentValues(postElement, data.key, data.val().text, data.val().author);
+});
+
+onChildRemoved(commentsRef, (data) => {
+  deleteComment(postElement, data.key);
+});
