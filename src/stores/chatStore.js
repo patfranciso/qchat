@@ -12,11 +12,14 @@ import {
   update,
   onChildAdded,
   onChildChanged,
+  off,
 } from 'src/boot/firebase';
 const pinia = createPinia();
 pinia.use(({ store }) => {
   store.router = markRaw(router);
 });
+
+let messagesRef;
 export const useChatStore = defineStore('chat', {
   state: () => ({ userDetails: {}, users: {}, messages: {} }),
   getters: {
@@ -121,13 +124,11 @@ export const useChatStore = defineStore('chat', {
       onChildAdded(usersRef, snapshot => {
         const userDetails = snapshot.val();
         const userId = snapshot.key;
-        // console.log({ action: 'firebaseGetUsers', snapshot, userDetails });
         userDetails && userId && this.addUser({ userId, userDetails });
       });
       onChildChanged(usersRef, snapshot => {
         const userDetails = snapshot.val();
         const userId = snapshot.key;
-        // console.log({ action: 'firebaseGetUsers', snapshot, userDetails });
         this.updateUser({ userId, userDetails });
       });
     },
@@ -141,7 +142,7 @@ export const useChatStore = defineStore('chat', {
         userId < otherUserId
           ? userId + '-' + otherUserId
           : otherUserId + '-' + userId;
-      const messagesRef = dbRef(rtdb, 'chats/' + chatId);
+      messagesRef = dbRef(rtdb, 'chats/' + chatId);
       console.log({ chatId });
       onChildAdded(messagesRef, snapshot => {
         let messageDetails = snapshot.val();
@@ -151,6 +152,14 @@ export const useChatStore = defineStore('chat', {
         console.log({ messageId, messageDetails });
         this.addMessage({ messageId, messageDetails });
       });
+    },
+    clearMessages() {
+      this.messages = {};
+    },
+    firebaseStopGettingMessages() {
+      console.log('firebaseStopGettingMessages');
+      if (messagesRef) off(messagesRef, onChildAdded, () => {});
+      this.messages = {};
     },
   },
 });
