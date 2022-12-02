@@ -20,7 +20,6 @@ export const useChatStore = defineStore('chat', {
   state: () => ({ userDetails: {}, users: {} }),
   getters: {
     otherUsers(state) {
-      // return state.users;
       let usersFiltered = {};
       Object.keys(state.users).forEach(key => {
         if (key !== state.userDetails.userId) {
@@ -33,11 +32,11 @@ export const useChatStore = defineStore('chat', {
   actions: {
     registerUser({ name, email, password }) {
       createUserWithEmailAndPassword(auth, email, password)
-        .then(response => {
+        .then(async response => {
           console.log(response);
           let userId = auth.currentUser.uid;
           console.log({ userId, name, email });
-          set(dbRef(rtdb, 'users/' + userId), {
+          await set(dbRef(rtdb, 'users/' + userId), {
             name,
             email,
             online: true,
@@ -47,7 +46,7 @@ export const useChatStore = defineStore('chat', {
           console.log(error.message);
         });
     },
-    loginUser({ name, email, password }) {
+    loginUser({ email, password }) {
       signInWithEmailAndPassword(auth, email, password)
         .then(response => {
           console.log(response);
