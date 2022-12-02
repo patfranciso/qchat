@@ -26,7 +26,7 @@ const rtdb = getDatabase();
 connectDatabaseEmulator(rtdb, 'localhost', 9000);
 
 const auth = getAuth();
-connectAuthEmulator(auth, 'http://localhost:9099');
+connectAuthEmulator(auth, 'http://localhost:9099', { disableWarnings: true });
 
 export {
   auth,
