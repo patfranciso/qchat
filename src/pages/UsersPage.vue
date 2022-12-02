@@ -2,9 +2,9 @@
   <q-page class="flex q-pa-md">
     <q-list class="full-width" separator>
       <q-item
-        v-for="user in otherUsers"
-        to="/chat"
-        :key="user.id"
+        v-for="(user, key) of otherUsers"
+        :to="'/chat/' + key"
+        :key="key"
         clickable
         v-ripple
       >
