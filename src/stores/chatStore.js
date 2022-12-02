@@ -11,6 +11,7 @@ import {
   onValue,
   update,
   onChildAdded,
+  onChildChanged,
 } from 'src/boot/firebase';
 const pinia = createPinia();
 pinia.use(({ store }) => {
@@ -108,8 +109,11 @@ export const useChatStore = defineStore('chat', {
       update(dbRef(rtdb, 'users/' + payload.userId), payload.updates);
     },
     addUser(payload) {
-      console.log({ payload });
       this.users[payload.userId] = payload.userDetails;
+    },
+    updateUser(payload) {
+      // this.users[payload.userId] = payload.userDetails; // fails
+      Object.assign(this.users[payload.userId], payload.userDetails);
     },
     firebaseGetUsers() {
       const usersRef = dbRef(rtdb, 'users');
@@ -119,6 +123,12 @@ export const useChatStore = defineStore('chat', {
         const userId = snapshot.key;
         console.log({ action: 'firebaseGetUsers', snapshot, userDetails });
         this.addUser({ userId, userDetails });
+      });
+      onChildChanged(usersRef, snapshot => {
+        const userDetails = snapshot.val();
+        const userId = snapshot.key;
+        console.log({ action: 'firebaseGetUsers', snapshot, userDetails });
+        this.updateUser({ userId, userDetails });
       });
     },
   },
