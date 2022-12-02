@@ -4,7 +4,10 @@ const routes = [
     component: () => import('layouts/MainLayout.vue'),
     children: [
       { path: '', component: () => import('src/pages/UsersPage.vue') },
-      { path: '/chat', component: () => import('src/pages/ChatPage.vue') },
+      {
+        path: '/chat/:otherUserId',
+        component: () => import('src/pages/ChatPage.vue'),
+      },
       { path: '/auth', component: () => import('src/pages/AuthPage.vue') },
     ],
   },

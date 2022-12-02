@@ -18,7 +18,7 @@ pinia.use(({ store }) => {
   store.router = markRaw(router);
 });
 export const useChatStore = defineStore('chat', {
-  state: () => ({ userDetails: {}, users: {} }),
+  state: () => ({ userDetails: {}, users: {}, messages: {} }),
   getters: {
     otherUsers(state) {
       let usersFiltered = {};
@@ -121,14 +121,35 @@ export const useChatStore = defineStore('chat', {
       onChildAdded(usersRef, snapshot => {
         const userDetails = snapshot.val();
         const userId = snapshot.key;
-        console.log({ action: 'firebaseGetUsers', snapshot, userDetails });
-        this.addUser({ userId, userDetails });
+        // console.log({ action: 'firebaseGetUsers', snapshot, userDetails });
+        userDetails && userId && this.addUser({ userId, userDetails });
       });
       onChildChanged(usersRef, snapshot => {
         const userDetails = snapshot.val();
         const userId = snapshot.key;
-        console.log({ action: 'firebaseGetUsers', snapshot, userDetails });
+        // console.log({ action: 'firebaseGetUsers', snapshot, userDetails });
         this.updateUser({ userId, userDetails });
+      });
+    },
+    addMessage({ messageId, messageDetails }) {
+      this.messages[messageId] = messageDetails;
+    },
+    firebaseGetMessages(otherUserId) {
+      console.log({ otherUserId });
+      const userId = this.userDetails.userId;
+      const chatId =
+        userId < otherUserId
+          ? userId + '-' + otherUserId
+          : otherUserId + '-' + userId;
+      const messagesRef = dbRef(rtdb, 'chats/' + chatId);
+      console.log({ chatId });
+      onChildAdded(messagesRef, snapshot => {
+        let messageDetails = snapshot.val();
+        const from = messageDetails.sender === userId ? 'me' : 'them';
+        messageDetails.from = from;
+        const messageId = snapshot.key;
+        console.log({ messageId, messageDetails });
+        this.addMessage({ messageId, messageDetails });
       });
     },
   },

@@ -40,24 +40,17 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
+import { useRoute } from 'vue-router';
+import { useChatStore } from 'src/stores/chatStore';
+import { storeToRefs } from 'pinia';
 
 const name = 'ChatPage';
 const newMessage = ref('');
-const messages = ref([
-  {
-    text: 'hey, how are you?',
-    from: 'me',
-  },
-  {
-    text: 'Fine. And you?',
-    from: 'them',
-  },
-  {
-    text: 'Great',
-    from: 'me',
-  },
-]);
+const chatStore = useChatStore();
+const { messages } = storeToRefs(chatStore);
+const { firebaseGetMessages } = chatStore;
+
 const sendMessage = e => {
   console.log('submit...', newMessage.value);
   messages.value.push({
@@ -66,4 +59,8 @@ const sendMessage = e => {
   });
   newMessage.value = '';
 };
+onMounted(() => {
+  const route = useRoute();
+  firebaseGetMessages(route.params.otherUserId);
+});
 </script>
