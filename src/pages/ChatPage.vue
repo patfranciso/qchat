@@ -1,10 +1,12 @@
 <template>
   <q-page class="flex column">
-    <q-banner class="text-center bg-grey-4"> User is offline. </q-banner>
+    <q-banner class="text-center bg-grey-4">
+      {{ otherUserName }} is offline.
+    </q-banner>
     <div class="q-pa-md column col justify-end">
       <q-chat-message
         v-for="message in messages"
-        :name="message.from"
+        :name="message.from === 'me' ? userDetails.name : otherUserName"
         :text="[message.text]"
         :key="message.text"
         :sent="message.from == 'me' ? true : false"
@@ -44,12 +46,18 @@ import { onMounted, onUnmounted, ref } from 'vue';
 import { useRoute } from 'vue-router';
 import { useChatStore } from 'src/stores/chatStore';
 import { storeToRefs } from 'pinia';
+import { computed } from '@vue/reactivity';
 
 const name = 'ChatPage';
+const otherUserId = ref('');
+const otherUserName = computed(() => {
+  return otherUserId.value ? otherUserDetails(otherUserId.value).name : '';
+});
 const newMessage = ref('');
 const chatStore = useChatStore();
-const { messages } = storeToRefs(chatStore);
-const { firebaseGetMessages, firebaseStopGettingMessages } = chatStore;
+const { messages, userDetails } = storeToRefs(chatStore);
+const { firebaseGetMessages, firebaseStopGettingMessages, otherUserDetails } =
+  chatStore;
 
 const sendMessage = e => {
   console.log('submit...', newMessage.value);
@@ -61,9 +69,11 @@ const sendMessage = e => {
 };
 onMounted(() => {
   const route = useRoute();
+  otherUserId.value = route.params.otherUserId;
   firebaseGetMessages(route.params.otherUserId);
 });
 onUnmounted(() => {
   firebaseStopGettingMessages();
+  otherUserId.value = '';
 });
 </script>

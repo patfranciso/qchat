@@ -161,5 +161,9 @@ export const useChatStore = defineStore('chat', {
       if (messagesRef) off(messagesRef, onChildAdded, () => {});
       this.messages = {};
     },
+    otherUserDetails(id) {
+      const userDetails = this.users[id];
+      return userDetails;
+    },
   },
 });
