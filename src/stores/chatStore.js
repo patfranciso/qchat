@@ -27,6 +27,7 @@ export const useChatStore = defineStore('chat', {
     messages: {},
     otherUserName: '',
     otherUserId: '',
+    otherUserIsOnline: false,
   }),
   getters: {
     otherUsers(state) {
@@ -38,12 +39,21 @@ export const useChatStore = defineStore('chat', {
       });
       return usersFiltered;
     },
+    isOtherUserOnline(state) {
+      return this.otherUserDetails(state.otherUserId).online;
+    },
   },
   actions: {
-    setOtherUserName() {
-      this.otherUserName = this.otherUserId
-        ? this.otherUserDetails(this.otherUserId).name
-        : '';
+    setOtherUserDetails() {
+      const details = this.otherUserDetails(this.otherUserId);
+      this.otherUserName = details.name;
+      this.otherUserId = this.otherUserId;
+      this.otherUserIsOnline = details.online;
+    },
+    clearOtherUserDetails() {
+      this.otherUserName = '';
+      this.otherUserId = '';
+      this.otherUserIsOnline = false;
     },
     registerUser({ name, email, password }) {
       createUserWithEmailAndPassword(auth, email, password)
@@ -173,7 +183,7 @@ export const useChatStore = defineStore('chat', {
       this.messages = {};
     },
     otherUserDetails(id) {
-      const userDetails = this.users[id];
+      const userDetails = this.users[id] ? this.users[id] : {};
       return userDetails;
     },
   },

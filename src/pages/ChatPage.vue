@@ -1,6 +1,6 @@
 <template>
   <q-page class="flex column">
-    <q-banner class="text-center bg-grey-4">
+    <q-banner v-if="!isOtherUserOnline" class="text-center bg-grey-4">
       {{ otherUserName }} is offline.
     </q-banner>
     <div class="q-pa-md column col justify-end">
@@ -46,15 +46,18 @@ import { onMounted, onUnmounted, ref } from 'vue';
 import { useRoute } from 'vue-router';
 import { useChatStore } from 'src/stores/chatStore';
 import { storeToRefs } from 'pinia';
-import { computed } from '@vue/reactivity';
 
 const name = 'ChatPage';
 const newMessage = ref('');
 const chatStore = useChatStore();
-const { messages, userDetails, otherUserId, otherUserName } =
+const { messages, userDetails, otherUserId, otherUserName, isOtherUserOnline } =
   storeToRefs(chatStore);
-const { firebaseGetMessages, firebaseStopGettingMessages, setOtherUserName } =
-  chatStore;
+const {
+  firebaseGetMessages,
+  firebaseStopGettingMessages,
+  setOtherUserDetails,
+  clearOtherUserDetails,
+} = chatStore;
 
 const sendMessage = e => {
   console.log('submit...', newMessage.value);
@@ -67,11 +70,11 @@ const sendMessage = e => {
 onMounted(() => {
   const route = useRoute();
   otherUserId.value = route.params.otherUserId;
-  setOtherUserName();
+  setOtherUserDetails();
   firebaseGetMessages(route.params.otherUserId);
 });
 onUnmounted(() => {
   firebaseStopGettingMessages();
-  otherUserId.value = '';
+  clearOtherUserDetails();
 });
 </script>
