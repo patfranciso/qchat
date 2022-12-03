@@ -49,14 +49,11 @@ import { storeToRefs } from 'pinia';
 import { computed } from '@vue/reactivity';
 
 const name = 'ChatPage';
-const otherUserId = ref('');
-const otherUserName = computed(() => {
-  return otherUserId.value ? otherUserDetails(otherUserId.value).name : '';
-});
 const newMessage = ref('');
 const chatStore = useChatStore();
-const { messages, userDetails } = storeToRefs(chatStore);
-const { firebaseGetMessages, firebaseStopGettingMessages, otherUserDetails } =
+const { messages, userDetails, otherUserId, otherUserName } =
+  storeToRefs(chatStore);
+const { firebaseGetMessages, firebaseStopGettingMessages, setOtherUserName } =
   chatStore;
 
 const sendMessage = e => {
@@ -70,6 +67,7 @@ const sendMessage = e => {
 onMounted(() => {
   const route = useRoute();
   otherUserId.value = route.params.otherUserId;
+  setOtherUserName();
   firebaseGetMessages(route.params.otherUserId);
 });
 onUnmounted(() => {

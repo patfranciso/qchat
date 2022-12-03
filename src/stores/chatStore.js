@@ -21,7 +21,13 @@ pinia.use(({ store }) => {
 
 let messagesRef;
 export const useChatStore = defineStore('chat', {
-  state: () => ({ userDetails: {}, users: {}, messages: {} }),
+  state: () => ({
+    userDetails: {},
+    users: {},
+    messages: {},
+    otherUserName: '',
+    otherUserId: '',
+  }),
   getters: {
     otherUsers(state) {
       let usersFiltered = {};
@@ -34,6 +40,11 @@ export const useChatStore = defineStore('chat', {
     },
   },
   actions: {
+    setOtherUserName() {
+      this.otherUserName = this.otherUserId
+        ? this.otherUserDetails(this.otherUserId).name
+        : '';
+    },
     registerUser({ name, email, password }) {
       createUserWithEmailAndPassword(auth, email, password)
         .then(async response => {
