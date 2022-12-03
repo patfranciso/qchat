@@ -17,6 +17,7 @@ import {
   onChildAdded,
   onChildChanged,
   off,
+  push,
 } from 'firebase/database';
 import firebaseConfig from '../../firebaseConfig';
 
@@ -43,4 +44,5 @@ export {
   onChildAdded,
   onChildChanged,
   off,
+  push,
 };

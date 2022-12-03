@@ -13,6 +13,7 @@ import {
   onChildAdded,
   onChildChanged,
   off,
+  push,
 } from 'src/boot/firebase';
 const pinia = createPinia();
 pinia.use(({ store }) => {
@@ -156,13 +157,15 @@ export const useChatStore = defineStore('chat', {
     addMessage({ messageId, messageDetails }) {
       this.messages[messageId] = messageDetails;
     },
+    calcChatId(userId, otherUserId) {
+      return userId < otherUserId
+        ? userId + '-' + otherUserId
+        : otherUserId + '-' + userId;
+    },
     firebaseGetMessages(otherUserId) {
       console.log({ otherUserId });
       const userId = this.userDetails.userId;
-      const chatId =
-        userId < otherUserId
-          ? userId + '-' + otherUserId
-          : otherUserId + '-' + userId;
+      const chatId = this.calcChatId(userId, otherUserId);
       messagesRef = dbRef(rtdb, 'chats/' + chatId);
       console.log({ chatId });
       onChildAdded(messagesRef, snapshot => {
@@ -185,6 +188,15 @@ export const useChatStore = defineStore('chat', {
     otherUserDetails(id) {
       const userDetails = this.users[id] ? this.users[id] : {};
       return userDetails;
+    },
+    async firebaseSendMessage(payload) {
+      console.log({ payload });
+      const { senderId, otherUserId, text } = payload;
+      const chatId = this.calcChatId(senderId, otherUserId);
+      await push(dbRef(rtdb, 'chats/' + chatId), {
+        text,
+        sender: senderId,
+      });
     },
   },
 });

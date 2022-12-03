@@ -57,13 +57,15 @@ const {
   firebaseStopGettingMessages,
   setOtherUserDetails,
   clearOtherUserDetails,
+  firebaseSendMessage,
 } = chatStore;
 
 const sendMessage = e => {
   console.log('submit...', newMessage.value);
-  messages.value.push({
+  firebaseSendMessage({
     text: newMessage.value,
-    from: 'me',
+    senderId: userDetails.value.userId,
+    otherUserId: otherUserId.value,
   });
   newMessage.value = '';
 };
