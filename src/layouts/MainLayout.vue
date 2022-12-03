@@ -51,11 +51,11 @@ const route = useRoute();
 const title = computed(() => {
   const currentPath = route.fullPath;
   if (currentPath == '/') return 'QChat';
-  else if (currentPath == '/chat') return 'Chat';
+  else if (currentPath.includes('/chat')) return otherUserName.value;
   else if (currentPath == '/auth') return 'Login';
 });
 const chatStore = useChatStore();
-const { userDetails } = storeToRefs(chatStore);
+const { userDetails, otherUserName } = storeToRefs(chatStore);
 const { logoutUser } = chatStore;
 </script>
 <style lang="sass">
