@@ -5,10 +5,10 @@
     </q-banner>
     <div class="q-pa-md column col justify-end">
       <q-chat-message
-        v-for="message in messages"
+        v-for="(message, key) in messages"
         :name="message.from === 'me' ? userDetails.name : otherUserName"
         :text="[message.text]"
-        :key="message.text"
+        :key="key"
         :sent="message.from == 'me' ? true : false"
       />
     </div>
