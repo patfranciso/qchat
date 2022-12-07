@@ -59,9 +59,7 @@ export const useChatStore = defineStore('chat', {
     registerUser({ name, email, password }) {
       createUserWithEmailAndPassword(auth, email, password)
         .then(async response => {
-          console.log(response);
           let userId = auth.currentUser.uid;
-          console.log({ userId, name, email });
           await set(dbRef(rtdb, 'users/' + userId), {
             name,
             email,
@@ -89,7 +87,6 @@ export const useChatStore = defineStore('chat', {
       this.userDetails = payload;
     },
     handleAuthStateChanged() {
-      console.log('handleAuthStateChanged');
       onAuthStateChanged(auth, user => {
         if (user) {
           // User is logged in
@@ -98,7 +95,6 @@ export const useChatStore = defineStore('chat', {
             dbRef(rtdb, '/users/' + userId),
             snapshot => {
               const userDetails = snapshot.val();
-              console.log({ userDetails });
               this.setUserDetails({
                 name: userDetails.name,
                 email: userDetails.email,
@@ -163,17 +159,14 @@ export const useChatStore = defineStore('chat', {
         : otherUserId + '-' + userId;
     },
     firebaseGetMessages(otherUserId) {
-      console.log({ otherUserId });
       const userId = this.userDetails.userId;
       const chatId = this.calcChatId(userId, otherUserId);
       messagesRef = dbRef(rtdb, 'chats/' + chatId);
-      console.log({ chatId });
       onChildAdded(messagesRef, snapshot => {
         let messageDetails = snapshot.val();
         const from = messageDetails.sender === userId ? 'me' : 'them';
         messageDetails.from = from;
         const messageId = snapshot.key;
-        console.log({ messageId, messageDetails });
         this.addMessage({ messageId, messageDetails });
       });
     },
@@ -181,7 +174,6 @@ export const useChatStore = defineStore('chat', {
       this.messages = {};
     },
     firebaseStopGettingMessages() {
-      console.log('firebaseStopGettingMessages');
       if (messagesRef) off(messagesRef, onChildAdded, () => {});
       this.messages = {};
     },
@@ -190,7 +182,6 @@ export const useChatStore = defineStore('chat', {
       return userDetails;
     },
     async firebaseSendMessage(payload) {
-      console.log({ payload });
       const { senderId, otherUserId, text } = payload;
       const chatId = this.calcChatId(senderId, otherUserId);
       await push(dbRef(rtdb, 'chats/' + chatId), {

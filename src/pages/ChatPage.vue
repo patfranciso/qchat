@@ -61,7 +61,6 @@ const {
 } = chatStore;
 
 const sendMessage = e => {
-  console.log('submit...', newMessage.value);
   firebaseSendMessage({
     text: newMessage.value,
     senderId: userDetails.value.userId,
@@ -88,7 +87,6 @@ const scrollToBottom = () => {
 watch(
   messages,
   value => {
-    console.log({ value });
     if (Object.keys(value).length > 0) {
       scrollToBottom();
     }
