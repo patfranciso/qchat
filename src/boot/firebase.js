@@ -1,7 +1,6 @@
 import { initializeApp } from 'firebase/app';
 import {
   getAuth,
-  connectAuthEmulator,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   signOut,
@@ -11,7 +10,6 @@ import {
   getDatabase,
   ref,
   set,
-  connectDatabaseEmulator,
   onValue,
   update,
   onChildAdded,
@@ -25,10 +23,8 @@ import firebaseConfig from '../../firebaseConfig';
 const app = initializeApp(firebaseConfig);
 
 const rtdb = getDatabase();
-connectDatabaseEmulator(rtdb, 'localhost', 9000);
 
 const auth = getAuth();
-connectAuthEmulator(auth, 'http://localhost:9099', { disableWarnings: true });
 
 export {
   auth,
