@@ -88,7 +88,7 @@ export const useChatStore = defineStore('chat', {
     },
     handleAuthStateChanged() {
       onAuthStateChanged(auth, user => {
-        if (user) {
+        if (user && auth.currentUser) {
           // User is logged in
           let userId = auth.currentUser.uid;
           onValue(
@@ -115,14 +115,16 @@ export const useChatStore = defineStore('chat', {
           this.router.push('/');
         } else {
           // User is logged out
-          this.firebaseUpdateUser({
-            userId: this.userDetails.userId,
-            updates: {
-              online: false,
-            },
-          });
-          this.setUserDetails({});
-          this.router.replace('/auth');
+          if (this.userDetails.userId) {
+            this.firebaseUpdateUser({
+              userId: this.userDetails.userId,
+              updates: {
+                online: false,
+              },
+            });
+            this.setUserDetails({});
+            this.router.replace('/auth');
+          }
         }
       });
     },
