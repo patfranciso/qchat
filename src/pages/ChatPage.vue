@@ -3,7 +3,10 @@
     <q-banner v-if="!isOtherUserOnline" class="text-center bg-grey-4">
       {{ otherUserName }} is offline.
     </q-banner>
-    <div class="q-pa-md column col justify-end">
+    <div
+      :class="{ invisible: !showMessages }"
+      class="q-pa-md column col justify-end"
+    >
       <q-chat-message
         v-for="(message, key) in messages"
         :name="message.from === 'me' ? userDetails.name : otherUserName"
@@ -49,6 +52,7 @@ import { storeToRefs } from 'pinia';
 
 const name = 'ChatPage';
 const newMessage = ref('');
+const showMessages = ref(false);
 const chatStore = useChatStore();
 const { messages, userDetails, otherUserId, otherUserName, isOtherUserOnline } =
   storeToRefs(chatStore);
@@ -89,6 +93,9 @@ watch(
   value => {
     if (Object.keys(value).length > 0) {
       scrollToBottom();
+      setTimeout(() => {
+        showMessages.value = true;
+      }, 200);
     }
   },
   { deep: true }
