@@ -24,7 +24,9 @@
             outlined
             rounded
             label="Message"
+            ref="inputMessage"
             dense
+            autofocus
           >
             <template v-slot:after>
               <q-btn
@@ -52,6 +54,7 @@ import { storeToRefs } from 'pinia';
 
 const name = 'ChatPage';
 const newMessage = ref('');
+const inputMessage = ref('');
 const showMessages = ref(false);
 const chatStore = useChatStore();
 const { messages, userDetails, otherUserId, otherUserName, isOtherUserOnline } =
@@ -63,14 +66,19 @@ const {
   clearOtherUserDetails,
   firebaseSendMessage,
 } = chatStore;
-
+const clearMessage = () => {
+  newMessage.value = '';
+  setTimeout(() => {
+    inputMessage.value.focus();
+  }, 20);
+};
 const sendMessage = e => {
   firebaseSendMessage({
     text: newMessage.value,
     senderId: userDetails.value.userId,
     otherUserId: otherUserId.value,
   });
-  newMessage.value = '';
+  clearMessage();
 };
 onMounted(() => {
   const route = useRoute();
