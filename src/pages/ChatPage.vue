@@ -1,5 +1,5 @@
 <template>
-  <q-page class="flex column">
+  <q-page class="flex column" id="chatPage">
     <q-banner v-if="!isOtherUserOnline" class="text-center bg-grey-4">
       {{ otherUserName }} is offline.
     </q-banner>
@@ -42,7 +42,7 @@
 </template>
 
 <script setup>
-import { onMounted, onUnmounted, ref } from 'vue';
+import { onMounted, onUnmounted, ref, watch } from 'vue';
 import { useRoute } from 'vue-router';
 import { useChatStore } from 'src/stores/chatStore';
 import { storeToRefs } from 'pinia';
@@ -79,4 +79,20 @@ onUnmounted(() => {
   firebaseStopGettingMessages();
   clearOtherUserDetails();
 });
+const scrollToBottom = () => {
+  const chatPage = document.getElementById('chatPage');
+  setTimeout(() => {
+    window.scrollTo(0, chatPage.scrollHeight);
+  }, 20);
+};
+watch(
+  messages,
+  value => {
+    console.log({ value });
+    if (Object.keys(value).length > 0) {
+      scrollToBottom();
+    }
+  },
+  { deep: true }
+);
 </script>
